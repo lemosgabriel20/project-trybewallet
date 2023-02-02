@@ -6,6 +6,7 @@ const INITIAL_WALLET_STATE = {
   editor: false, // valor booleano que indica de uma despesa está sendo editada
   idToEdit: 0, // valor numérico que armazena o id da despesa que esta sendo editada
   isFetching: true,
+  areSavedValues: false,
 };
 
 const wallet = (state = INITIAL_WALLET_STATE, action) => {
@@ -19,6 +20,16 @@ const wallet = (state = INITIAL_WALLET_STATE, action) => {
     return {
       ...state,
       isFetching: action.payload,
+    };
+  case 'SAVE_EXPENSES':
+    return {
+      ...state,
+      expenses: [...state.expenses, action.payload],
+    };
+  case 'UPDATE_SAVED_VALUES_BOOL':
+    return {
+      ...state,
+      areSavedValues: action.payload,
     };
   default:
     return state;
