@@ -86,7 +86,10 @@ class Wallet extends React.Component {
           >
             { (isFetching) ? <option>Carregando</option>
               : currencies.map((currency, index) => (
-                <option key={ index }>
+                <option
+                  data-testid="option"
+                  key={ index }
+                >
                   { currency }
                 </option>
               )) }
@@ -119,6 +122,8 @@ class Wallet extends React.Component {
           </select>
         </label>
         <button
+          data-testid="add-button"
+          type="button"
           onClick={ this.handleClick }
         >
           Adicionar despesa
