@@ -4,6 +4,7 @@ export const ADD_CURRENCIES = 'ADD_CURRENCIES';
 export const REQUEST_ADD_WALLET = 'REQUEST_ADD_WALLET';
 export const SAVE_EXPENSES = 'SAVE_EXPENSES';
 export const UPDATE_SAVED_VALUES_BOOL = 'UPDATE_SAVED_VALUES_BOOL';
+export const UPDATE_EXPENSES = 'UPDATE_EXPENSES';
 
 export const addUser = (userData) => ({
   type: ADD_EMAIL_USER,
@@ -27,6 +28,11 @@ const addWallet = (walletData) => ({
 
 export const saveExpenses = (expenses) => ({
   type: SAVE_EXPENSES,
+  payload: expenses,
+});
+
+export const updateExpenses = (expenses) => ({
+  type: UPDATE_EXPENSES,
   payload: expenses,
 });
 

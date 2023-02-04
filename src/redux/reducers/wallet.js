@@ -31,6 +31,11 @@ const wallet = (state = INITIAL_WALLET_STATE, action) => {
       ...state,
       areSavedValues: action.payload,
     };
+  case 'UPDATE_EXPENSES':
+    return {
+      ...state,
+      expenses: [...action.payload],
+    };
   default:
     return state;
   }
