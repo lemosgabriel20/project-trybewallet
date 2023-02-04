@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
+import Table from '../components/Table';
 import { fetchWallet, saveExpenses, updateSavedBool } from '../redux/actions';
 
 // ao montar o componente, fazer requisição
@@ -128,6 +129,7 @@ class Wallet extends React.Component {
         >
           Adicionar despesa
         </button>
+        <Table />
       </div>
     );
   }
