@@ -11,12 +11,13 @@ import { fetchWallet, saveExpenses, updateSavedBool } from '../redux/actions';
 class Wallet extends React.Component {
   state = {
     id: 0,
-    value: '0',
+    value: '',
     description: '',
     currency: 'USD',
     method: 'Dinheiro',
     tag: 'Alimentação',
     exchangeRates: {},
+    isButtonDisabled: true,
   };
 
   componentDidMount() {
@@ -30,7 +31,25 @@ class Wallet extends React.Component {
       .then((response) => response.json())
       .then((data) => {
         this.setState({ exchangeRates: data }, () => {
-          dispatch(saveExpenses(this.state));
+          const {
+            id,
+            value,
+            description,
+            currency,
+            method,
+            tag,
+            exchangeRates,
+          } = this.state;
+          const newData = {
+            id,
+            value,
+            description,
+            currency,
+            method,
+            tag,
+            exchangeRates,
+          };
+          dispatch(saveExpenses(newData));
           dispatch(updateSavedBool(true));
           this.setState((prevState) => {
             const iterator = 1;
@@ -39,6 +58,7 @@ class Wallet extends React.Component {
               id: prevState.id + iterator,
               value: '',
               description: '',
+              isButtonDisabled: true,
             });
           });
         });
@@ -48,12 +68,19 @@ class Wallet extends React.Component {
   handleInput = (evt) => {
     const { id } = evt.target;
     const { value } = evt.target;
-    if (id === 'value') this.setState({ [id]: (value) });
-    else this.setState({ [id]: value });
+    this.setState({ [id]: value });
+  };
+
+  handleValue = (evt) => {
+    this.setState({ value: evt.target.value }, () => {
+      const { state } = this;
+      if (state.value === '') this.setState({ isButtonDisabled: true });
+      else this.setState({ isButtonDisabled: false });
+    });
   };
 
   render() {
-    const { value, description } = this.state;
+    const { value, description, isButtonDisabled } = this.state;
     const { currencies, isFetching } = this.props;
     return (
       <div>
@@ -65,7 +92,7 @@ class Wallet extends React.Component {
             id="value"
             type="number"
             value={ value }
-            onChange={ this.handleInput }
+            onChange={ this.handleValue }
           />
         </label>
         <label htmlFor="description">
@@ -126,6 +153,7 @@ class Wallet extends React.Component {
           data-testid="add-button"
           type="button"
           onClick={ this.handleClick }
+          disabled={ isButtonDisabled }
         >
           Adicionar despesa
         </button>
