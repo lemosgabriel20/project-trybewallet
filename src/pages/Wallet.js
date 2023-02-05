@@ -180,6 +180,7 @@ class Wallet extends React.Component {
         </label>
         {(editor) ? (
           <button
+            data-testid="final-edit-button"
             type="button"
             onClick={ this.handleEdit }
             disabled={ isButtonDisabled }

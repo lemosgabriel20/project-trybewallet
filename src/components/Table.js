@@ -40,7 +40,7 @@ class Table extends Component {
           }));
           const rate = Number(exactCurrency.ask);
           return (
-            <tbody key={ expense.id }>
+            <tbody data-testid="tbody-test" key={ expense.id }>
               <tr>
                 <td>{ expense.description }</td>
                 <td>{ expense.tag }</td>

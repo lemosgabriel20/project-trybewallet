@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { renderWithRouterAndRedux } from './helpers/renderWith';
 import Login from '../pages/Login';
 import Wallet from '../pages/Wallet';
-// import Header from '../components/Header';
 import App from '../App';
 
 it('Testa se o botão Entrar é clicável após inserir email e senha corretamente', () => {
@@ -28,12 +27,7 @@ it('', async () => {
   userEvent.click(button);
   expect(value).toHaveTextContent('');
   expect(description).toHaveTextContent('');
-  // onst email = screen.getByTestId('email-field');
   const total = screen.getByTestId('total-field');
-  await waitFor(() => {
-    const options = screen.getAllByTestId('option');
-    console.log(options);
-  });
   const currency = screen.getByTestId('header-currency-field');
   expect(total).toHaveTextContent('0');
   expect(currency).toHaveTextContent('BRL');
@@ -43,4 +37,35 @@ it('', () => {
   renderWithRouterAndRedux(<App />);
   const div = screen.getByTestId('app-div');
   expect(div).toBeInTheDocument();
+});
+
+it('', async () => {
+  renderWithRouterAndRedux(<Wallet />);
+  const value = screen.getByTestId('value-input');
+  const description = screen.getByTestId('description-input');
+  const addButton = screen.getByTestId('add-button');
+  userEvent.type(value, '12');
+  userEvent.type(description, 'Doze dólares');
+  userEvent.click(addButton);
+  await waitFor(() => {
+    const tableElements = screen.getAllByTestId('tbody-test');
+    const deleteButtons = screen.getAllByTestId('delete-btn');
+    expect(tableElements).toHaveLength(1);
+    userEvent.click(deleteButtons[0]);
+    expect(tableElements).toHaveLength(0);
+  }, { timeout: 3000 });
+  await waitFor(() => {
+    userEvent.type(value, '12');
+    userEvent.type(description, 'Doze dólares');
+    userEvent.click(addButton);
+    const tableElements = screen.getAllByTestId('tbody-test');
+    const editButtons = screen.getAllByTestId('edit-btn');
+    const finalEditBtn = screen.getByTestId('final-edit-button');
+    expect(tableElements).toHaveLength(1);
+    userEvent.click(editButtons[0]);
+    userEvent.type(value, '13');
+    userEvent.type(description, 'Treze dólares');
+    userEvent.click(finalEditBtn);
+    expect(tableElements).toHaveLength(1);
+  }, { timeout: 3000 });
 });
