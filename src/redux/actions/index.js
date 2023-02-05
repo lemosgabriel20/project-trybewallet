@@ -5,6 +5,8 @@ export const REQUEST_ADD_WALLET = 'REQUEST_ADD_WALLET';
 export const SAVE_EXPENSES = 'SAVE_EXPENSES';
 export const UPDATE_SAVED_VALUES_BOOL = 'UPDATE_SAVED_VALUES_BOOL';
 export const UPDATE_EXPENSES = 'UPDATE_EXPENSES';
+export const EDIT_MODE = 'EDIT_MODE';
+export const UPDATE_ID = 'UPDATE_ID';
 
 export const addUser = (userData) => ({
   type: ADD_EMAIL_USER,
@@ -35,6 +37,23 @@ export const updateExpenses = (expenses) => ({
   type: UPDATE_EXPENSES,
   payload: expenses,
 });
+
+export const accessEditMode = (bool, id) => ({
+  type: 'EDIT_MODE',
+  payload: bool,
+  id,
+});
+
+export const updateId = (expenses, data, id) => {
+  const newExpenses = [...expenses];
+  const toEdit = newExpenses.find((exp) => exp.id === id);
+  const index = newExpenses.indexOf(toEdit);
+  newExpenses[index] = data;
+  return {
+    type: 'UPDATE_ID',
+    payload: newExpenses,
+  };
+};
 
 export function fetchWallet() {
   return (dispatch) => {

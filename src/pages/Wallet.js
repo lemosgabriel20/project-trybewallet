@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import Table from '../components/Table';
-import { fetchWallet, saveExpenses, updateSavedBool } from '../redux/actions';
+import { fetchWallet, saveExpenses, updateSavedBool,
+  accessEditMode, updateId } from '../redux/actions';
 
 // ao montar o componente, fazer requisição
 // dar display da requisição como map -> <option>{currency}</option>
@@ -65,6 +66,34 @@ class Wallet extends React.Component {
       });
   };
 
+  handleEdit = () => {
+    const { dispatch, expenses, idToEdit } = this.props;
+    const {
+      value,
+      description,
+      currency,
+      method,
+      tag,
+      exchangeRates,
+    } = this.state;
+    const newData = {
+      id: idToEdit,
+      value,
+      description,
+      currency,
+      method,
+      tag,
+      exchangeRates,
+    };
+    dispatch(updateId(expenses, newData, idToEdit));
+    this.setState({
+      value: '',
+      description: '',
+      isButtonDisabled: true,
+    });
+    dispatch(accessEditMode(false, null));
+  };
+
   handleInput = (evt) => {
     const { id } = evt.target;
     const { value } = evt.target;
@@ -81,7 +110,7 @@ class Wallet extends React.Component {
 
   render() {
     const { value, description, isButtonDisabled } = this.state;
-    const { currencies, isFetching } = this.props;
+    const { currencies, isFetching, editor } = this.props;
     return (
       <div>
         <Header />
@@ -149,14 +178,23 @@ class Wallet extends React.Component {
             <option>Saúde</option>
           </select>
         </label>
-        <button
-          data-testid="add-button"
-          type="button"
-          onClick={ this.handleClick }
-          disabled={ isButtonDisabled }
-        >
-          Adicionar despesa
-        </button>
+        {(editor) ? (
+          <button
+            type="button"
+            onClick={ this.handleEdit }
+            disabled={ isButtonDisabled }
+          >
+            Editar despesa
+          </button>)
+          : (
+            <button
+              data-testid="add-button"
+              type="button"
+              onClick={ this.handleClick }
+              disabled={ isButtonDisabled }
+            >
+              Adicionar despesa
+            </button>)}
         <Table />
       </div>
     );
@@ -166,6 +204,9 @@ class Wallet extends React.Component {
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
   isFetching: state.wallet.isFetching,
+  expenses: state.wallet.expenses,
+  editor: state.wallet.editor,
+  idToEdit: state.wallet.idToEdit,
 });
 
 Wallet.propTypes = {
